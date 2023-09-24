@@ -73,6 +73,7 @@ To check which AWS user is configured to execute API calls, execute `aws sts get
 }
 ```
 [Configuring AWS CLI env vars](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
+<p>It is necessary to generate AWS CLI credentials via AWS IAM console to utilize the AWS CLI</p>
 
 ## References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
