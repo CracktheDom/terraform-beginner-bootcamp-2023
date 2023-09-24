@@ -75,6 +75,64 @@ To check which AWS user is configured to execute API calls, execute `aws sts get
 [Configuring AWS CLI env vars](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
 <p>It is necessary to generate AWS CLI credentials via AWS IAM console to utilize the AWS CLI</p>
 
+## Terraform Basics
+
+### Providers
+
+Terraform providers configure access to cloud platforms like AWS, Azure, or GCP. Providers are initialized with `terraform init`. 
+
+Example providers:
+
+- AWS
+- AzureRM
+- Google 
+
+### Modules
+
+Modules encapsulate reusable Terraform configurations. Modules can be used to create pre-built infrastructure components. 
+
+Module example:
+
+```
+module "vpc" {
+  source = "./vpc-module"
+  name = "my-vpc"
+}
+```
+Terraform documentation on generating random ids, uuids, numbers and strings using the *random* provider can be found [here.](https://registry.terraform.io/providers/hashicorp/random/latest/docs)
+
+### State Files
+
+The `terraform.tfstate` file tracks metadata like resource IDs and associates them with real world objects. This allows Terraform to determine differences between real and desired state.
+
+**The state file should not be manually edited.**
+
+### Lock Files 
+
+`.terraform.lock.lock` files prevent conflicting operations from different Terraform commands running at the same time.
+
+### Common Commands
+
+- `terraform init` - Initializes Providers and Modules
+- `terraform plan` - Previews changes 
+- `terraform apply` - Applies changes
+- `terraform destroy` - Destroys infrastructure
+
+### Version Control
+
+The following are recommended for version control:
+
+- `.tf` files - Infrastructure as Code files
+- `.tfvars` files - Input variable files
+
+The following should NOT be committed to version control:
+
+- `terraform.tfstate` 
+- `.terraform` directory
+- `.terraform.lock.hcl`
+
+This separation prevents sensitive data exposure.
+
 ## References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
 [^2]: [Gitpod documentation](http://gitpod.io/docs/configure/workspaces/tasks)
