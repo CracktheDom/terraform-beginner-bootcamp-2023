@@ -144,7 +144,7 @@ To migrate the state file from the local environment to Terra Cloud:
 6. Paste the API token after the prompt that asks for the token
 7. Execute `ls -lah ~/.terraform.d` & verify the `credentials.tfrc.json` file exists
 8. Add the following `cloud` block to any `.tf` file with the appropriate values for `organization` and `workspaces`
-```json
+```terraform
 terraform {
   cloud {
     organization = "organization-name"
