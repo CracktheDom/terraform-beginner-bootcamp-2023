@@ -133,6 +133,37 @@ The following should NOT be committed to version control:
 
 This separation prevents sensitive data exposure.
 
+## Terraform Cloud
+To migrate the state file from the local environment to Terra Cloud:
+1. [Sign up for Terraform Cloud](https://developer.hashicorp.com/terraform/tutorials/cloud-get-started/cloud-sign-up)
+2. Create new project and workspace
+2. When executing the `terraform login` command, the script utilizes Lynx, a text-based browser, that does not render the html page correctly within the terminal of the Gitpod environment. The workaround is to navigate to [https://app.terraform.io/app/settings/tokens?source=terraform-login](https://app.terraform.io/app/settings/tokens?source=terraform-login)
+3. Create the API token
+4. Copy the API token
+5. Quit, `Q`, the Lynx browser
+6. Paste the API token after the prompt that asks for the token
+7. Execute `ls -lah ~/.terraform.d` & verify the `credentials.tfrc.json` file exists
+8. Add the following `cloud` block to any `.tf` file with the appropriate values for `organization` and `workspaces`
+```json
+terraform {
+  cloud {
+    organization = "organization-name"
+    workspaces {
+      name = "terra-house-1"
+    }
+  }
+```
+9. [Terraform Cloud Documentation for storing the state file remotely](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-remote)
+
+10. In the Terraform Cloud console, in **terra-house-1** workspace, navigate to the **Variables** console
+11. Add **Workspace Variables** for **AWS_ACCESS_KEY_ID** and **AWS_SECRET_ACCESS_KEY** and input their respective values from AWS IAM user credentials created earlier. Make sure to select the **Sensitive** option
+12. Execute `terraform init` to add the cloud provider
+13. Next, execute `terraform plan` to view proposed changes that will be applied to deploying infrastructure
+14. Next, execute `terraform apply` to deploy infrastructure
+15. Check the **Runs** console within Terraform Cloud to view whether the `terraform plan` or `terraform apply` commands were successful or not
+16. If `terraform apply` commands was successful, you can view the state file in the **States** console
+
+
 ## References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
 [^2]: [Gitpod documentation](http://gitpod.io/docs/configure/workspaces/tasks)

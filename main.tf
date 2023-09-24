@@ -1,4 +1,10 @@
 terraform {
+  cloud {
+    organization = "cloudBouncer"
+    workspaces {
+      name = "terra-house-1"
+    }
+  }
   required_providers {
     random = {
       source  = "hashicorp/random"
@@ -14,6 +20,7 @@ terraform {
 
 provider "aws" {
   # Configuration options
+  region = "us-east-2"
 }
 
 provider "random" {
