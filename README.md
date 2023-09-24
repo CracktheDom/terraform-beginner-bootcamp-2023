@@ -34,6 +34,20 @@ The commands to install Terraform were incorrect and utilized deprecate commands
 + We need to be careful using using `init` because it will not rerun commands in that section if an existing workspace is restarted. 
 + Change Gitpod tasks in `.gitpod.yml`, from `init` to `before` so installation occurs everytime new workspace is started.[^2]
 
+### Working with Environment Variables
++ To list all currently set environment variables, use the `env` command
++ The results of the `env` command can be filtered using the `grep` command, e.g. `env | grep AWS_`
+
+#### Setting/Unsetting Environment Variables
++ To set a variable, execute `variable_name=value_of_variable`, e.g. `GREETING='Hi, there!'`
++ This method sets the environment variable in the current terminal that is being used. If another terminal is opened, this enviroment variable will not be available.
++ To set environment variables *globally*, execute the following `export GREETING='Hi, there!!'`
++ To check the value of an environment variable, execute `echo $VARIABLE_NAME`, e.g. `echo $GREETING` or `env | grep GREETING`
++ To unset an environment variable, execute `unset VARIABLE_NAME`, e.g. `unset HELLO`
+
+#### Setting Environment Variables in Gitpod
++ To set a variable, execute `gp env variable_name=value_of_variable`, e.g. `gp env GREETING='Hi, there!'`
+
 ### References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
 [^2]: [Gitpod documentation](http://gitpod.io/docs/configure/workspaces/tasks)
