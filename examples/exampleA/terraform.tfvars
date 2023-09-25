@@ -30,6 +30,6 @@ tags = {
   "Team" = "devops"
 }
 
-Simple values like strings, numbers, and booleans are used for primitive types. Lists and maps allow customizing groups of values.
+// Simple values like strings, numbers, and booleans are used for primitive types. Lists and maps allow customizing groups of values.
 
-The .tfvars file allows overriding defaults without changing the base Terraform code. This provides flexibility to adapt the infrastructure across environments.
+// The .tfvars file allows overriding defaults without changing the base Terraform code. This provides flexibility to adapt the infrastructure across environments.
