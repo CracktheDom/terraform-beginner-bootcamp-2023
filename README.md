@@ -166,6 +166,39 @@ terraform {
 ### Generate Terraform Cloud credentials file
 Since the `.terraform` directory and other similar directories are not being tracked in the version control system, whenever a Gitpod workspace is started, the directories and files, i.e., `~/.terraform.d/credentials.tfrc.json` that were previously created by executing the `terraform login` command are lost. Setting the Terraform Cloud API Token as an environment variable, TERRAFORM_CLOUD_TOKEN, would allow for the implementation of a Bash script to recreate the `~/.terraform.d/credentials.tfrc.json` file, and allow for the Terraform state file to continue to be stored remotely.
 
+### Create Terraform executable alias
+The `.bash_profile` file is used to configure the shell environment for Bash users. It is executed when a new Bash shell is opened.
+
+Some key points about `.bash_profile`:
+
+- It allows customizing the Bash environment by setting environment variables, shell options, and aliases
+
+- Aliases allow creating shortcuts for commonly used commands or long commands
+
+- For example, can create alias like:
+
+```
+alias tf=$(which terraform)
+```
+
+- This lets you run `tf` instead of `terraform`
+
+- Other common aliases:
+
+```
+alias c='clear'
+alias g='git' 
+``` 
+
+- Aliases save time and keystrokes by avoiding retyping long commands
+
+- The `.bash_profile` is located in the user's home directory
+
+- Changes take effect in new Bash sessions after reloading `.bash_profile`
+
+So in summary, the `.bash_profile` can be used to set up a personalized Bash environment including helpful aliases for commands you use often. This allows you to work more efficiently at the command line.
+
+Created Bash script, [./bin/set_tf_alias](./bin/set_tf_alias), to add terraform alias to `~/.bash_profile`
 
 ## References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
