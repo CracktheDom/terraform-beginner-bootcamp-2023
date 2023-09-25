@@ -93,5 +93,41 @@ Key differences:
 
 So in summary, Terraform variables customize configuration while environment variables configure and authenticate the Terraform tool. Both are useful but serve very distinct purposes.
 
+### Loading Terraform Input Variables
+
+- Input variables allow you to parameterize your Terraform configuration. This lets you customize infrastructure without changing code.
+
+- Variables are defined in your Terraform files with variable blocks:
+  
+```terraform
+variable "instance_type" {
+  type = string
+  default = "t2.micro"
+}
+```
+- Variable types include string, number, boolean, list, map, object, tuple. You can set defaults and mark variables optional/required.
+
+- Simple variables can be passed via the -var command line flag:
+
+`terraform apply -var "instance_type=t2.small"`
+
+- Groups of variables can be defined in .tfvars files like terraform.tfvars. Terraform automatically loads them.
+
+- Modules have input variables defined in variables.tf. You pass values when calling the module.
+
+- Sensitive variables should go in a separate tfvars file that is not committed to source control.
+
+- auto.tfvars can define defaults that are overridable via other variables.
+
+- Unset variables fall back to defaults defined in variable blocks.
+
+- Multiple tfvars files and -var flags can be combined in one command. Later values override earlier ones.
+
+- Environment variables are used for configuring Terraform itself, not passed to your configuration.
+
+Overall, input variables allow full customization of Terraform infrastructure with parameterized configurations.
+
+[Learn more about Inputting variables](https://developer.hashicorp.com/terraform/language/values/variables)
+
 
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
