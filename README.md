@@ -163,6 +163,9 @@ terraform {
 15. Check the **Runs** console within Terraform Cloud to view whether the `terraform plan` or `terraform apply` commands were successful or not
 16. If `terraform apply` commands was successful, you can view the state file in the **States** console
 
+### Generate Terraform Cloud credentials file
+Since the `.terraform` directory and other similar directories are not being tracked in the version control system, whenever a Gitpod workspace is started, the directories and files, i.e., `~/.terraform.d/credentials.tfrc.json` that were previously created by executing the `terraform login` command are lost. Setting the Terraform Cloud API Token as an environment variable, TERRAFORM_CLOUD_TOKEN, would allow for the implementation of a Bash script to recreate the `~/.terraform.d/credentials.tfrc.json` file, and allow for the Terraform state file to continue to be stored remotely.
+
 
 ## References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
