@@ -14,6 +14,9 @@ if ! grep -q 'alias tf=' ~/.bash_profile; then
   # Inform user
   echo 'Added Terraform alias to ~/.bash_profile'
 
+  # Load new alias in existing shell
+  source ~/.bash_profile
+
 else
 
   echo 'Terraform alias already exists in ~/.bash_profile'
