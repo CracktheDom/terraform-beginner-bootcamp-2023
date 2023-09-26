@@ -150,6 +150,7 @@ terraform import aws_instance.example i-abcd1234
 terraform refresh
 ```
 ![pic of new remote state file](../assets/terraform-new-state.png)
+![pic of new remote state file](../assets/terraform-new-state-diff.png)
 
 5. Populate your Terraform resource configuration with the attributes and details now in your state. You can output resources to see their attributes.
 
