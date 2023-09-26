@@ -1,14 +1,19 @@
-output "website_bucket_arn" {
+output "wonder_bucket_arn" {
   description = "ARN of the bucket"
-  value       = module.terrahouse_aws.wonder_bucket.arn
+  value       = module.terrahouse_aws.arn
 }
 
-output "website_bucket_name" {
+output "wonder_bucket_name" {
   description = "Name (id) of the bucket"
-  value       = module.terrahouse_aws.wonder_bucket.name
+  value       = module.terrahouse_aws.name
 }
 
-output "website_bucket_domain" {
+output "wonder_bucket_domain" {
   description = "Domain name of the bucket"
-  value       = module.terrahouse_aws.wonder_bucket.domain
+  value       = module.terrahouse_aws.domain
+}
+
+output "random_name" {
+  description = "Domain name of the bucket"
+  value       = module.terrahouse_aws.random_bucket_name_string
 }
