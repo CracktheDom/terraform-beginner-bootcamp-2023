@@ -140,7 +140,7 @@ Terraform allows importing existing infrastructure into your Terraform state so 
 ```
 terraform import aws_instance.example i-abcd1234
 ```
-![pic of successful import](../assets/terraform-import.png)
+![pic of successful import](../assets/terraform-import-resized.png)
 
 3. Terraform will import the resource and add it to your state file. It will show up in state as "imported".
 
@@ -163,10 +163,11 @@ The key is mapping existing infrastructure to empty resource definitions and imp
 ### How to Remove Managed Resources Without Destroying Them
 Here are a few options to remove a resource from Terraform state without destroying it:
 
+- Execute `terraform state list` to display currently managed resources in the state file
 - `terraform taint <resource>` - This marks a resource as tainted, meaning it will be destroyed and recreated on the next apply. You can then prevent the destroy by commenting out the resource config or using `-ignore-tainted` on apply. The resource remains intact outside of Terraform.
 
 - `terraform state rm <resource>` - This removes the resource from the Terraform state entirely. It will no longer be managed by Terraform. Use with caution as it could leave orphaned resources.
-  - `terraform state rm -dry-run <resource>` - Displays that the `<resource>` would be removed from the state file without actually executing the action.
+  - `terraform state rm -dry-run <resource>`[^2] - Displays that the `<resource>` would be removed from the state file without actually executing the action.
 
 - replace provider with null - Replace the provider for that resource with the null provider. Terraform will no longer perform actions on it.
 
@@ -175,3 +176,4 @@ Here are a few options to remove a resource from Terraform state without destroy
 - Comment out - Simply comment out the resource config. On next apply it will be removed from state without destroy.
 
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
+[^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)
