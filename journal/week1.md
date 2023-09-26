@@ -129,5 +129,51 @@ Overall, input variables allow full customization of Terraform infrastructure wi
 
 [Learn more about Inputting variables](https://developer.hashicorp.com/terraform/language/values/variables)
 
+## Addressing Configuration Drift with Terraform Import
+
+Terraform allows importing existing infrastructure into your Terraform state so that it can be managed by Terraform. Here is an overview of how to import infrastructure:
+
+1. Write your Terraform configuration for the infrastructure or resources you want to import. Leave the resource definition empty without any attributes.
+
+2. Run `terraform import` for each resource, specifying the resource address and resource ID:
+
+```
+terraform import aws_instance.example i-abcd1234
+```
+![pic of successful import](../assets/terraform-import-resized.png)
+
+3. Terraform will import the resource and add it to your state file. It will show up in state as "imported".
+
+4. Refresh your state to pull the latest details:
+
+```
+terraform refresh
+```
+![pic of new remote state file](../assets/terraform-new-state.png)
+![pic of new remote state file](../assets/terraform-new-state-diff.png)
+
+5. Populate your Terraform resource configuration with the attributes and details now in your state. You can output resources to see their attributes.
+
+6. Now when you run `terraform plan`, it will show any changes needed to match your configuration rather than wanting to create a new resource. 
+
+7. You can proceed with running `terraform apply` and managing the existing infrastructure going forward.
+
+The key is mapping existing infrastructure to empty resource definitions and importing them before populating the configuration. This allows adopting resources not originally created by Terraform.
+
+### How to Remove Managed Resources Without Destroying Them
+Here are a few options to remove a resource from Terraform state without destroying it:
+
+- Execute `terraform state list` to display currently managed resources in the state file
+- `terraform taint <resource>` - This marks a resource as tainted, meaning it will be destroyed and recreated on the next apply. You can then prevent the destroy by commenting out the resource config or using `-ignore-tainted` on apply. The resource remains intact outside of Terraform.
+
+- `terraform state rm <resource>` - This removes the resource from the Terraform state entirely. It will no longer be managed by Terraform. Use with caution as it could leave orphaned resources.
+  - `terraform state rm -dry-run <resource>`[^2] - Displays that the `<resource>` would be removed from the state file without actually executing the action.
+
+- replace provider with null - Replace the provider for that resource with the null provider. Terraform will no longer perform actions on it.
+
+- `ignore_changes` - Add `ignore_changes` lifecycle rule to ignore all changes to the resource. It will remain in state but unmodified.
+
+- Comment out - Simply comment out the resource config. On next apply it will be removed from state without destroy.
 
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
+[^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)
