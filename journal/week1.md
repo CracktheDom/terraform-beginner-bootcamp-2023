@@ -99,7 +99,7 @@ So in summary, Terraform variables customize configuration while environment var
 
 - Variables are defined in your Terraform files with variable blocks:
   
-```terraform
+```hcl
 variable "instance_type" {
   type = string
   default = "t2.micro"
@@ -197,7 +197,7 @@ Here are a few options to remove a resource from Terraform state without destroy
 
 - The source is specified in your Terraform code when declaring a module:
 
-```tf
+```hcl
 module "terrahouse_aws" {
   source = "./modules/terrahouse_aws"
 }
@@ -210,6 +210,31 @@ module "terrahouse_aws" {
 - Module versions allow upgrading module functionality over time.
 
 - Refer to Terraform [docs](https://developer.hashicorp.com/terraform/tutorials/modules/module-create#create-a-module) for guidance on creating a module
+
+### Installing a Module
+
+- When you run `terraform init`, the module code is downloaded to a `modules/` directory in your working directory.
+
+- Updates to modules are installed by re-running `terraform init` or running `terraform get`.
+
+- Installed modules appear in the Terraform dependency graph. Resources defined in modules look like: `module.vpc.aws_subnet.public`
+
+- Input variables allow customizing and parameterizing modules. Set them within your module block:
+
+```hcl
+module "vpc" {
+  source = "..."
+  
+  subnet_counts = {
+    public = 2 
+    private = 3
+  }
+}
+```
+
+- Outputs from modules can be referenced to pass data to other resources.
+
+Overall, modules allow Terraform configurations to be decomposed and packaged into reusable components that can be published, shared, and installed like any other code dependency.
 
 [Terraform Docs on Module Sources](https://developer.hashicorp.com/terraform/language/modules/sources)
 
