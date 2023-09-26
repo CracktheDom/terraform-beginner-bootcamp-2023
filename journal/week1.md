@@ -175,5 +175,48 @@ Here are a few options to remove a resource from Terraform state without destroy
 
 - Comment out - Simply comment out the resource config. On next apply it will be removed from state without destroy.
 
+## Terraform Modules
+
+- Terraform modules allow you to encapsulate and reuse infrastructure configurations.
+
+- Modules exist as files in a directory structure. This module directory can be stored and shared. 
+
+- The module source refers to where the module code is loaded from when using a module.
+
+- Modules can be sourced from:
+
+  - Local file paths - ./modules/my-module or ../modules/my-module
+
+  - Terraform Registry - registry.terraform.io/namespace/module
+
+  - GitHub - github.com/username/repo//modules/my-module
+
+  - BitBucket - bitbucket.org/username/repo/modules/my-module
+
+  - HTTP URLs - http://example.com/modules/my-module
+
+- The source is specified in your Terraform code when declaring a module:
+
+```
+module "mymodule" {
+  source = "app.terraform.io/example/vpc"
+}
+```
+
+- Terraform will download and cache the module code from the source location.
+
+- Using version tags like 1.0.0 in the source URL pins the module to a specific release.
+
+- Module versions allow upgrading module functionality over time.
+
+```terraform
+module "terrahouse_aws" {
+  source = "./modules/terrahouse_aws"
+  user_uuid = var.user-uuid
+  bucket_name = random_string.random_bucket_name.result
+}
+```
+[Terraform Module Docs](https://developer.hashicorp.com/terraform/language/modules/sources)
+
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
 [^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)
