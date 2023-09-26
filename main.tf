@@ -1,13 +1,29 @@
-# Generate a random string
-# https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
-resource "random_string" "random_bucket_name" {
-  length  = 26
-  special = false
-  upper   = false
+terraform {
+  required_providers {
+
+    # https://registry.terraform.io/providers/hashicorp/random/latest/docs
+    random = {
+      source  = "hashicorp/random"
+      version = "3.5.1"
+    }
+
+    # https://registry.terraform.io/providers/hashicorp/aws/latest
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.17.0"
+    }
+  }
 }
 
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
-resource "aws_s3_bucket" "wonder_bucket" {
-  bucket = random_string.random_bucket_name.result
+provider "aws" {
+  # Configuration options
+  region = "us-east-2"
+}
+
+provider "random" {
+}
+
+module "terrahouse_aws" {
+  source = "./modules/terrahouse_aws"
 
 }
