@@ -17,3 +17,8 @@ output "random_name" {
   description = "Domain name of the bucket"
   value       = module.terrahouse_aws.random_bucket_name_string
 }
+
+output "random_uuid" {
+  description = "Randomly generated UUID"
+  value       = module.terrahouse_aws.random_uuid
+}

@@ -25,6 +25,5 @@ provider "random" {
 
 module "terrahouse_aws" {
   source = "./modules/terrahouse_aws"
-  user_uuid = var.user-uuid
-  bucket_name = random_string.random_bucket_name.result
+
 }

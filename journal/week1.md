@@ -197,9 +197,9 @@ Here are a few options to remove a resource from Terraform state without destroy
 
 - The source is specified in your Terraform code when declaring a module:
 
-```
-module "mymodule" {
-  source = "app.terraform.io/example/vpc"
+```tf
+module "terrahouse_aws" {
+  source = "./modules/terrahouse_aws"
 }
 ```
 
@@ -209,14 +209,9 @@ module "mymodule" {
 
 - Module versions allow upgrading module functionality over time.
 
-```terraform
-module "terrahouse_aws" {
-  source = "./modules/terrahouse_aws"
-  user_uuid = var.user-uuid
-  bucket_name = random_string.random_bucket_name.result
-}
-```
-[Terraform Module Docs](https://developer.hashicorp.com/terraform/language/modules/sources)
+- Refer to Terraform [docs](https://developer.hashicorp.com/terraform/tutorials/modules/module-create#create-a-module) for guidance on creating a module
+
+[Terraform Docs on Module Sources](https://developer.hashicorp.com/terraform/language/modules/sources)
 
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
 [^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)
