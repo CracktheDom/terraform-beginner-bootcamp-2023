@@ -140,7 +140,7 @@ Terraform allows importing existing infrastructure into your Terraform state so 
 ```
 terraform import aws_instance.example i-abcd1234
 ```
-![pic of successful import](assets/terraform-import.png)
+![pic of successful import](../assets/terraform-import.png)
 
 3. Terraform will import the resource and add it to your state file. It will show up in state as "imported".
 
@@ -149,7 +149,7 @@ terraform import aws_instance.example i-abcd1234
 ```
 terraform refresh
 ```
-![pic of new remote state file](assets/terraform-new-state.png)
+![pic of new remote state file](../assets/terraform-new-state.png)
 
 5. Populate your Terraform resource configuration with the attributes and details now in your state. You can output resources to see their attributes.
 
