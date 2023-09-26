@@ -129,5 +129,34 @@ Overall, input variables allow full customization of Terraform infrastructure wi
 
 [Learn more about Inputting variables](https://developer.hashicorp.com/terraform/language/values/variables)
 
+## Addressing Configuration Drift with Terraform Import
+
+Terraform allows importing existing infrastructure into your Terraform state so that it can be managed by Terraform. Here is an overview of how to import infrastructure:
+
+1. Write your Terraform configuration for the infrastructure or resources you want to import. Leave the resource definition empty without any attributes.
+
+2. Run `terraform import` for each resource, specifying the resource address and resource ID:
+
+```
+terraform import aws_instance.example i-abcd1234
+``` 
+![pic of successful import]()
+
+3. Terraform will import the resource and add it to your state file. It will show up in state as "imported".
+
+4. Refresh your state to pull the latest details:
+
+```
+terraform refresh
+```
+![pic of new remote state file]()
+
+5. Populate your Terraform resource configuration with the attributes and details now in your state. You can output resources to see their attributes.
+
+6. Now when you run `terraform plan`, it will show any changes needed to match your configuration rather than wanting to create a new resource. 
+
+7. You can proceed with running `terraform apply` and managing the existing infrastructure going forward.
+
+The key is mapping existing infrastructure to empty resource definitions and importing them before populating the configuration. This allows adopting resources not originally created by Terraform.
 
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
