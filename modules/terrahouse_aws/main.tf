@@ -81,6 +81,26 @@ resource "aws_s3_bucket_acl" "wonder_bucket_acl" {
   acl    = "public-read"
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object
+resource "aws_s3_object" "index_html" {
+  bucket = aws_s3_bucket.wonder_bucket.id
+  key    = "index.html"
+  source = "${path.root}/public/index.html"
+
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("/path/to/file"))}"
+  etag = filemd5("${path.root}/public/index.html")
+}
+
+resource "aws_s3_object" "error_html" {
+  bucket = aws_s3_bucket.wonder_bucket.id
+  key    = "error.html.html"
+  source = "${path.root}/public/error.html"
+
+  etag = filemd5("${path.root}/public/error.html")
+}
+
 /* Notice that there is no provider block in this configuration. 
 When Terraform processes a module block, it will inherit the provider from the 
 enclosing configuration. Because of this, we recommend that you do not include 
