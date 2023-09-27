@@ -240,7 +240,7 @@ Overall, modules allow Terraform configurations to be decomposed and packaged in
 
 
 ## Setting Up S3 Static Web Hosting
-+ To [enable](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) static website hosting
++ [Enable](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) static website hosting by adding `aws_s3_bucket_website_configuration` block
 + configure index.html & error.html files
   + `mkdir public && touch ./public/index.html ./public/error.html`
 
@@ -264,13 +264,16 @@ EOF
 ```
 
 + Setting permissions for website access
-  + Step 1: Edit S3 Block Public Access settings
-  +  Step 2: Add a bucket policy
-  +  Object access control lists
+  + Step 1: Edit S3 Block Public Access settings by adding `aws_s3_bucket_public_access_block` block, learn more [here](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block)
+  + Step 2: Add a bucket policy, `aws_s3_bucket_policy`
+    + Use a bucket policy to grant public read permission to your objects. However, the bucket policy applies only to objects that are owned by the bucket owner. If your bucket contains objects that aren't owned by the bucket owner, the bucket owner should use the object access control list (ACL) to grant public READ permission on those objects. [^3]
+  
+When the code is correctly implemented, the url for the site will be outputted.
 
-[pic showing S3 static website](assets/...)
+![pic showing S3 static website](../assets/S3-website-success.png)
 
 
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
 [^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)
+[^3]: [Object access control lists](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html#object-acl)
