@@ -238,5 +238,39 @@ Overall, modules allow Terraform configurations to be decomposed and packaged in
 
 [Terraform Docs on Module Sources](https://developer.hashicorp.com/terraform/language/modules/sources)
 
+
+## Setting Up S3 Static Web Hosting
++ To [enable](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) static website hosting
++ configure index.html & error.html files
+  + `mkdir public && touch ./public/index.html ./public/error.html`
+
+```sh
+# Insert HTML code into index.html
+cat <<EOF > ./public/index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Website</title>
+</head>
+<body>
+
+  <h1>Welcome to my website!</h1>
+  
+  <p>This is my main page content.</p>
+  
+</body>
+</html>
+EOF
+```
+
++ Setting permissions for website access
+  + Step 1: Edit S3 Block Public Access settings
+  +  Step 2: Add a bucket policy
+  +  Object access control lists
+
+[pic showing S3 static website](assets/...)
+
+
+## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
 [^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)

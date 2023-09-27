@@ -10,7 +10,7 @@ output "wonder_bucket_name" {
 
 output "wonder_bucket_domain" {
   description = "Domain name of the bucket"
-  value       = module.terrahouse_aws.domain
+  value       = module.terrahouse_aws.website_url
 }
 
 output "random_name" {
