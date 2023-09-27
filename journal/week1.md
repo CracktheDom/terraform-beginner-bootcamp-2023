@@ -241,8 +241,8 @@ Overall, modules allow Terraform configurations to be decomposed and packaged in
 
 ## Setting Up S3 Static Web Hosting
 + [Enable](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) static website hosting by adding `aws_s3_bucket_website_configuration` block
-+ configure index.html & error.html files
-  + `mkdir public && touch ./public/index.html ./public/error.html`
++ configure **index.html** & **error.html** files
+  + execute `mkdir public && touch ./public/index.html ./public/error.html`
 
 ```sh
 # Insert HTML code into index.html
@@ -263,6 +263,42 @@ cat <<EOF > ./public/index.html
 EOF
 ```
 
+### Working with Files in Terraform
+
+#### Path Variable
+
+Here is a summary of using Terraform's path functions to manipulate file paths:
+
+- The path functions allow transforming and extracting parts of filesystem paths in Terraform.
+
+- `path.module` returns the filesystem path of the module where the expression is called. Useful for locating files relative to a module.
+
+- `path.root` returns the filesystem path of the root module. Helpful for referencing files relative to the root.
+
+- `path.cwd` returns the current working directory where Terraform was run. Can create paths relative to cwd.
+
+- `path.basename` extracts just the filename from a path. Removes directories.
+
+- `path.dirname` extracts the directory portion of a path without the filename.
+
+- `path.ext` extracts the file extension from a path.
+
+- `path.join` concatenates path segments into a single path. Prevents OS-specific issues.
+
+Example usages:
+
+```
+path.module   # /terraform/modules/vpc
+path.root     # /terraform/modules 
+path.basename(# /terraform/modules/vpc/main.tf) -> main.tf
+path.ext(# /terraform/modules/vpc.zip) -> .zip
+path.join("data", "users.csv") # data/users.csv
+```
+
+Overall, path functions are useful for working with filesystem paths in a portable way. They help locate, parse, and manipulate paths in Terraform code.
+
+## S3 Static Web Hosting continued
+
 + Setting permissions for website access
   + Step 1: Edit S3 Block Public Access settings by adding `aws_s3_bucket_public_access_block` block, learn more [here](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block)
   + Step 2: Add a bucket policy, `aws_s3_bucket_policy`
@@ -271,7 +307,6 @@ EOF
 When the code is correctly implemented, the url for the site will be outputted.
 
 ![pic showing S3 static website](../assets/S3-website-success.png)
-
 
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
