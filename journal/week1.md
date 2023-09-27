@@ -288,11 +288,11 @@ Here is a summary of using Terraform's path functions to manipulate file paths:
 Example usages:
 
 ```
-path.module   # /terraform/modules/vpc
-path.root     # /terraform/modules 
-path.basename(# /terraform/modules/vpc/main.tf) -> main.tf
-path.ext(# /terraform/modules/vpc.zip) -> .zip
-path.join("data", "users.csv") # data/users.csv
+path.module   -> /terraform/modules/vpc
+path.root     -> /terraform/modules 
+path.basename(/terraform/modules/vpc/main.tf) -> main.tf
+path.ext(/terraform/modules/vpc.zip) -> .zip
+path.join("data", "users.csv") -> data/users.csv
 ```
 
 Overall, path functions are useful for working with filesystem paths in a portable way. They help locate, parse, and manipulate paths in Terraform code.
