@@ -14,11 +14,11 @@ output "wonder_bucket_domain" {
 }
 
 output "random_name" {
-  description = "Domain name of the bucket"
+  description = "Random generated name of the bucket"
   value       = module.terrahouse_aws.random_bucket_name_string
 }
 
 output "random_uuid" {
-  description = "Randomly generated UUID"
+  description = "Randomly generated UUID used for tags"
   value       = module.terrahouse_aws.random_uuid
 }

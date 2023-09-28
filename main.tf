@@ -20,12 +20,10 @@ provider "aws" {
   region = "us-east-2"
 }
 
-provider "random" {
-}
+provider "random" {}
 
 module "terrahouse_aws" {
-  source = "./modules/terrahouse_aws"
+  source              = "./modules/terrahouse_aws"
   index_html_filepath = var.index_html_filepath
   error_html_filepath = var.error_html_filepath
-
 }
