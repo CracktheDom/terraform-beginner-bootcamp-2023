@@ -354,8 +354,6 @@ resource "aws_instance" "example" {
 Overall, locals allow encapsulating reusable values and prevent duplication in Terraform configurations. They provide readability and maintainability.
 
 ### Data Sources
-Here is a summary on using data sources in Terraform:
-
 - Data sources allow accessing information about existing infrastructure resources.
 
 - They are defined like resources, but start with the data keyword:
@@ -385,7 +383,34 @@ data "aws_ami" "ubuntu" {
 
 Overall, data sources allow dynamically querying external state rather than hardcoding values. This provides flexibility to access information about existing resources.
 
-### filemd5 function & etag (TODO)
+### filemd5 & etag function
+The filemd5 and etag functions in Terraform are useful for creating unique identifiers and performing cache invalidation when file contents change.
+
+filemd5 calculates an md5 hash of the contents of a file. For example:
+
+```
+filemd5("${path.module}/config.txt")
+```
+
+This generates a unique md5 checksum based on the contents of the file. If the file changes, the md5 hash will be different.
+
+etag generates a unique identifier based on one or more values. For example:
+
+``` 
+etag(filemd5("${path.module}/config.txt"))
+```
+
+This creates an etag value calculated from the md5 hash of the file.
+
+Uses cases:
+
+- Generate unique IDs for infrastructure based on file contents.
+- Trigger updates/redeploys when tracked files are modified.
+- Implement caching and invalidation when source files change.
+
+For example, you can attach the etag value to a deployment resource. When the source file changes, the etag changes, forcing a redeploy.
+
+The filemd5 and etag functions allow implementing changes to infrastructure based on modifications to important files. This enables tracking changes and forcing updates.
 
 ### jsonencode Function
 - jsonencode converts a Terraform expression result into a string containing the JSON representation.
@@ -438,6 +463,31 @@ Overall, jsonencode makes it easy to convert Terraform values into JSON-formatte
 
 ## Implementing CloudFront continued
 + set content type of `aws_s3_object` for **index.html** & **error.html**, so CF will serve document instead of download it when accessing CF url
+  
++ Here is an explanation of how CloudFront recaches new files uploaded to an S3 origin:
+
+  - By default, CloudFront will only recache an object from the origin if it is already in the edge cache and the file is overwritten in S3.
+
+  - When an existing file is updated in S3, CloudFront gets an HTTP 304 Not Modified response indicating the file was changed. This triggers recaching.
+
+  - However, for new files uploaded to S3 that are not already cached in CloudFront, no 304 status is returned.
+
+  - To get CloudFront to recache new objects:
+
+    - You can invalidate the object explicitly using the CloudFront API or AWS CLI. This recaches immediately.
+
+    - Use versioned S3 objects. Uploading a new object version triggers recaching.
+
+    - Set a Cache-Control max-age=0 header when uploading. This forces CloudFront to revalidate on next fetch.
+
+    - Use the s3:ObjectCreated:* event to trigger a Lambda@Edge function to invalidate the new object.
+
+  - You can also set a CloudFront default TTL of 0 to force all objects to be requeried from the origin frequently. But this impacts performance.
+
++ So in summary, new files require extra steps to trigger immediate recaching compared to updating existing cached files. But options exist to force CloudFront to fetch new objects.
+
+When to CloudFront is configured correctly, the index.html will be served.
+
 ![pic of accessing CFD successfully](../assets/CFD-success.png)
 
 ## References
