@@ -308,6 +308,132 @@ When the code is correctly implemented, the url for the site will be outputted.
 
 ![pic showing S3 static website](../assets/S3-website-success.png)
 
+## Implementing CloudFront Distribution
++ [AWS CloudFront Distribution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution)
++ [CloudFront Origin Access Control, which is used by CloudFront Distributions with an Amazon S3 bucket as the origin.](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_origin_access_control)
+
+### Terraform Locals
+- Locals allow defining named values that can be used multiple times within a module or configuration. 
+
+- They are like variables, but cannot be changed externally. Locals are fixed values within the module.
+
+- Locals are defined in a locals block:
+
+```hcl
+locals {
+  service_name = "forum"
+  owner        = "Community Team"
+}
+```
+
+- Local values can help reduce repetition:
+
+```hcl
+locals {
+  common_tags = {
+    Service = local.service_name
+    Owner   = local.owner
+  }
+}
+```
+
+- Local values are accessed via the local namespace: 
+
+```hcl
+resource "aws_instance" "example" {
+  tags = local.common_tags
+}
+```
+
+- Locals can only be defined once per module. Subsequent definitions will merge with previous.
+
+- Local values are calculated only when referenced to avoid unnecessary processing.
+
+- Local names should be unique within a module.
+
+Overall, locals allow encapsulating reusable values and prevent duplication in Terraform configurations. They provide readability and maintainability.
+
+### Data Sources
+Here is a summary on using data sources in Terraform:
+
+- Data sources allow accessing information about existing infrastructure resources.
+
+- They are defined like resources, but start with the data keyword:
+
+```hcl
+data "aws_ami" "ubuntu" {
+  filter {
+    name = "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*"
+  }
+}
+```
+
+- Data source values can be referenced like regular resources: 
+
+`data.aws_ami.ubuntu.id`
+
+- Data sources don't create or modify infrastructure, they just query and return data.
+
+- Common uses:
+  - Look up IDs, attributes of resources (AMIs, VPCS etc).
+  - Reference information defined outside Terraform.
+  - Import existing infrastructure into Terraform state.
+
+- Data sources can access info from various providers - AWS, GCP, Kubernetes etc.
+
+- The data is only refreshed when the data block is queried, not on every run.
+
+Overall, data sources allow dynamically querying external state rather than hardcoding values. This provides flexibility to access information about existing resources.
+
+### jsonencode Function
+- jsonencode converts a Terraform expression result into a string containing the JSON representation.
+
+- It is useful for formatting strings in JSON syntax, especially for passing to API calls.
+
+- Simple example:
+
+```hcl
+jsonencode(["a", "b", "c"])
+
+// ["a", "b", "c"]
+```
+
+- Works for maps:
+
+```hcl
+jsonencode({
+  name = "John"
+  age  = 30
+})
+
+// {"name": "John", "age": 30}
+```
+
+- And objects:
+
+```hcl
+jsonencode({
+  user = {
+    name = "John"
+    age  = 30  
+  }
+})
+
+// {"user": {"name": "John", "age": 30}}
+```
+
+- Automatically escapes special characters.
+
+- Nested structures become nested JSON.
+
+- Keys in objects are converted to strings.
+
+- Useful for passing Terraform values as JSON parameters in API calls, user data scripts etc.
+
+- More readable than trying to format JSON strings manually.
+
+Overall, jsonencode makes it easy to convert Terraform values into JSON-formatted strings when needed.
+
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
 [^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)
