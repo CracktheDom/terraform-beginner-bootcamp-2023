@@ -17,3 +17,8 @@ variable "error_html_filepath" {
     error_message = "The provided path for error.html does not exist"
   }
 }
+
+variable "content_version" {
+  description = "Used to implement versioning of certain files that will be specifically updated"
+  type = number
+}

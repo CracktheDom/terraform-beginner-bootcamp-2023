@@ -475,6 +475,33 @@ Overall, jsonencode makes it easy to convert Terraform values into JSON-formatte
   - To get CloudFront to recache new objects:
 
     - You can invalidate the object explicitly using the CloudFront API or AWS CLI. This recaches immediately.
+      - Here is an example aws cli command to invalidate files in a CloudFront distribution:
+
+      ```bash
+      aws cloudfront create-invalidation \
+        --distribution-id EXAMPLE_DIST_ID \
+        --paths /index.html /images/logo.png
+      ```
+
+      This will invalidate the files `/index.html` and `/images/logo.png` in the CloudFront distribution with ID `EXAMPLE_DIST_ID`.
+
+      Some notes:
+
+      - The `--distribution-id` option specifies the target distribution ID.
+
+      - `--paths` lists the paths of files you want to invalidate.
+
+      - Paths should include leading slash and no domain.
+
+      - Up to 3000 paths can be invalidated in a single call.
+
+      - Invalidation sends a request to CloudFront to fetch new files from the origin.
+
+      - Invalidation status can be checked with `aws cloudfront get-invalidation`.
+
+      - Alternative is to invalidate by */* to purge entire cache.
+
+      This provides a way to programmatically invalidate files and force CloudFront to refresh objects from the origin. Useful after uploading new versions of files.
 
     - Use versioned S3 objects. Uploading a new object version triggers recaching.
 
@@ -489,6 +516,90 @@ Overall, jsonencode makes it easy to convert Terraform values into JSON-formatte
 When to CloudFront is configured correctly, the index.html will be served.
 
 ![pic of accessing CFD successfully](../assets/CFD-success.png)
+
+## Set up Content Version of files so those specific files are re-cache in CloudFront
+
+### Resource Lifecycle
+- The lifecycle block defines lifecycle rules for a resource like create, destroy and ignore behaviors.
+
+- Common lifecycle settings:
+
+  - create_before_destroy - Create new resource before destroying old to avoid downtime.
+
+  - prevent_destroy - Prevents accidental delete of resource.
+
+  - ignore_changes - Ignore certain attributes when planning updates to prevent forced resource recreation.
+
+- Example lifecycle config:
+
+```hcl
+resource "aws_instance" "server" {
+
+  # ...
+  
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy       = true
+
+    ignore_changes = [
+      ami, # Ignore AMI changes
+    ]
+  }
+}
+```
+
+- create_before_destroy provisions a new updated instance before deleting old instance.
+
+- prevent_destroy stops instance from being deleted.
+
+- ignore_changes avoids rebuilding instance if just the AMI changes.
+
+- Lifecycle rules depend on the resource type and provider.
+
+Overall, lifecycle metadata provides control over the lifecycle of resources to prevent unwanted destruction or changes. This provides stability and customization of management workflows.
+
+[Resource Lifecycle](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle)
+[more resource lifecycle](https://developer.hashicorp.com/terraform/langauge/meta-arguments/lifecycle)
+
+### Terraform Data Resource
+Terraform's []`terraform_data`](https://developer.hashicorp.com/terraform/language/resources/terraform-data#example-usage-data-for-replace_triggered_by) resource is a powerful feature that allows users to retrieve and manipulate data from external sources, making it a versatile tool for managing infrastructure as code. Here's a summary of how to use the `terraform_data` resource:
+
+1. **Data Sources**: Terraform's `terraform_data` resource is designed to fetch data from various external sources, such as AWS, Azure, Google Cloud, or any custom provider that Terraform supports.
+
+2. **Declaration**: To use `terraform_data`, you declare it in your Terraform configuration file (typically a `.tf` file). You specify the data source type and provide any required or optional configuration parameters. For example, if you want to fetch AWS information, you would declare an `aws_ami` data source.
+
+3. **Data Retrieval**: After declaring the data source, you can use Terraform to fetch data from the specified external source. Terraform queries the source based on the configuration parameters you provided.
+
+4. **Immutable Data**: The data fetched via `terraform_data` is treated as immutable, meaning it cannot be modified or updated. It's a read-only operation used for referencing information from external sources.
+
+5. **Dependency Management**: Terraform automatically manages the dependencies between resources and data sources. When you declare a resource that depends on data retrieved via `terraform_data`, Terraform ensures that the data is fetched before provisioning the resource.
+
+6. **Output Usage**: You can use the data retrieved from `terraform_data` in various ways. Common use cases include using this data to configure resources, set variables, or generate dynamic values for your infrastructure.
+
+7. **Data Refresh**: Terraform allows you to refresh the data from external sources by running the `terraform refresh` command. This can be useful if you want to update the information without making changes to your infrastructure.
+
+```hcl
+variable "revision" {
+  default = 1
+}
+
+resource "terraform_data" "replacement" {
+  input = var.revision
+}
+
+# This resource has no convenient attribute which forces replacement,
+# but can now be replaced by any change to the revision variable value.
+resource "example_database" "test" {
+  lifecycle {
+    replace_triggered_by = [terraform_data.replacement]
+  }
+}
+```
+
+In summary, Terraform's `terraform_data` resource is a crucial component for fetching and utilizing external data within your infrastructure as code. It provides a reliable and efficient way to incorporate information from external sources into your Terraform configurations, helping you create more dynamic and flexible infrastructure deployments.
+
+![](../assets/CloudFront-version-1.png)
+![](../assets/CloudFront-version-2.png)
 
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
