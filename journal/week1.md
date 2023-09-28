@@ -385,6 +385,8 @@ data "aws_ami" "ubuntu" {
 
 Overall, data sources allow dynamically querying external state rather than hardcoding values. This provides flexibility to access information about existing resources.
 
+### filemd5 function & etag (TODO)
+
 ### jsonencode Function
 - jsonencode converts a Terraform expression result into a string containing the JSON representation.
 
@@ -433,6 +435,10 @@ jsonencode({
 - More readable than trying to format JSON strings manually.
 
 Overall, jsonencode makes it easy to convert Terraform values into JSON-formatted strings when needed.
+
+## Implementing CloudFront continued
++ set content type of `aws_s3_object` for **index.html** & **error.html**, so CF will serve document instead of download it when accessing CF url
+![pic of accessing CFD successfully](../assets/)
 
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
