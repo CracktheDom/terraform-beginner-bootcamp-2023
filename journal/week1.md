@@ -438,7 +438,7 @@ Overall, jsonencode makes it easy to convert Terraform values into JSON-formatte
 
 ## Implementing CloudFront continued
 + set content type of `aws_s3_object` for **index.html** & **error.html**, so CF will serve document instead of download it when accessing CF url
-![pic of accessing CFD successfully](../assets/)
+![pic of accessing CFD successfully](../assets/CFD-success.png)
 
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
