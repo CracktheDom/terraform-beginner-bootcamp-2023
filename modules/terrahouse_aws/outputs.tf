@@ -22,3 +22,8 @@ output "website_url" {
 output "random_uuid" {
   value = random_uuid.id.result
 }
+
+output "cloudfront_domain" {
+  description = "Domain of the CloudFront distribution"
+  value = aws_cloudfront_distribution.s3_distribution.domain_name
+}

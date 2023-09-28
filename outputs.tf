@@ -22,3 +22,8 @@ output "random_uuid" {
   description = "Randomly generated UUID used for tags"
   value       = module.terrahouse_aws.random_uuid
 }
+
+output "cloudfront_domain" {
+  description = "Domain of the CloudFront distribution"
+  value = module.terrahouse_aws.cloudfront_domain
+}
