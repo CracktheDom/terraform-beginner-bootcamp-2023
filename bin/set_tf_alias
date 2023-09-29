@@ -20,5 +20,6 @@ if ! grep -q 'alias tf=' ~/.bash_profile; then
 else
 
   echo 'Terraform alias already exists in ~/.bash_profile'
+  source ~/.bash_profile
 
 fi
