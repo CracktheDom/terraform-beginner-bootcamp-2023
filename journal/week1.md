@@ -1,6 +1,35 @@
 # Terraform Beginner Bootcamp 2023 - week 1
+  * [Standard Module Structure](#standard-module-structure)
+    + [Terraform and Input Variables](#terraform-and-input-variables)
+      - [-var flag](#-var-flag)
+      - [-var-file flag](#-var-file-flag)
+      - [auto.tfvars file](#autotfvars-file)
+    + [Terraform Cloud Variables](#terraform-cloud-variables)
+    + [Loading Terraform Input Variables](#loading-terraform-input-variables)
+  * [Addressing Configuration Drift with Terraform Import](#addressing-configuration-drift-with-terraform-import)
+    + [How to Remove Managed Resources Without Destroying Them](#how-to-remove-managed-resources-without-destroying-them)
+  * [Terraform Modules](#terraform-modules)
+    + [Installing a Module](#installing-a-module)
+  * [Setting Up S3 Static Web Hosting](#setting-up-s3-static-web-hosting)
+    + [Working with Files in Terraform](#working-with-files-in-terraform)
+      - [Path Variable](#path-variable)
+  * [S3 Static Web Hosting continued](#s3-static-web-hosting-continued)
+  * [Implementing CloudFront Distribution](#implementing-cloudfront-distribution)
+    + [Terraform Locals](#terraform-locals)
+    + [Data Sources](#data-sources)
+    + [filemd5 and etag function](#filemd5-and-etag-function)
+    + [jsonencode Function](#jsonencode-function)
+  * [Implementing CloudFront continued](#implementing-cloudfront-continued)
+  * [Set up Content Version of files](#set-up-content-version-of-files)
+    + [Resource Lifecycle](#resource-lifecycle)
+    + [Terraform Data Resource](#terraform-data-resource)
+  * [Implement Trigger for Invalidating CloudFront Cache](#implement-trigger-for-invalidating-cloudfront-cache)
+    + [Local-exec Provisioner](#local-exec-provisioner)
+  * [Configure Terraform to Upload assets to S3](#configure-terraform-to-upload-assets-to-s3)
+  * [References](#references)
 
-## Standard Module Structure[^1]
+## Standard Module Structure 
+Documentation on Standard Module Structure [^1]
 ```sh
 $ tree complete-module/
 .
@@ -48,14 +77,14 @@ This standard structure makes Terraform modules portable, reusable and maintaina
 
 - This flag allows you to set individual variables via the command line. For example:
 
-`terraform apply -var "instance_type=t2.micro"`
+  `terraform apply -var "instance_type=t2.micro"`
 
 This lets you override a variable value without modifying config files.
 
 #### -var-file flag
 - This flag specifies an external variables file for Terraform to load. For example:
 
-`terraform apply -var-file="prod.tfvars"`
+  `terraform apply -var-file="prod.tfvars"`
 
 This allows you to define reusable groups of variable values.
 
@@ -99,17 +128,17 @@ So in summary, Terraform variables customize configuration while environment var
 
 - Variables are defined in your Terraform files with variable blocks:
   
-```hcl
-variable "instance_type" {
-  type = string
-  default = "t2.micro"
-}
-```
+  ```hcl
+  variable "instance_type" {
+    type = string
+    default = "t2.micro"
+  }
+  ```
 - Variable types include string, number, boolean, list, map, object, tuple. You can set defaults and mark variables optional/required.
 
 - Simple variables can be passed via the -var command line flag:
 
-`terraform apply -var "instance_type=t2.small"`
+  `terraform apply -var "instance_type=t2.small"`
 
 - Groups of variables can be defined in .tfvars files like terraform.tfvars. Terraform automatically loads them.
 
@@ -137,18 +166,16 @@ Terraform allows importing existing infrastructure into your Terraform state so 
 
 2. Run `terraform import` for each resource, specifying the resource address and resource ID:
 
-```
-terraform import aws_instance.example i-abcd1234
-```
+  `terraform import aws_instance.example i-abcd1234`
+
 ![pic of successful import](../assets/terraform-import-resized.png)
 
 3. Terraform will import the resource and add it to your state file. It will show up in state as "imported".
 
 4. Refresh your state to pull the latest details:
 
-```
-terraform refresh
-```
+  `terraform refresh`
+
 ![pic of new remote state file](../assets/terraform-new-state.png)
 ![pic of new remote state file](../assets/terraform-new-state-diff.png)
 
@@ -197,11 +224,11 @@ Here are a few options to remove a resource from Terraform state without destroy
 
 - The source is specified in your Terraform code when declaring a module:
 
-```hcl
-module "terrahouse_aws" {
-  source = "./modules/terrahouse_aws"
-}
-```
+  ```hcl
+  module "terrahouse_aws" {
+    source = "./modules/terrahouse_aws"
+  }
+  ```
 
 - Terraform will download and cache the module code from the source location.
 
@@ -221,16 +248,16 @@ module "terrahouse_aws" {
 
 - Input variables allow customizing and parameterizing modules. Set them within your module block:
 
-```hcl
-module "vpc" {
-  source = "..."
-  
-  subnet_counts = {
-    public = 2 
-    private = 3
+  ```hcl
+  module "vpc" {
+    source = "..."
+    
+    subnet_counts = {
+      public = 2 
+      private = 3
+    }
   }
-}
-```
+  ```
 
 - Outputs from modules can be referenced to pass data to other resources.
 
@@ -244,24 +271,24 @@ Overall, modules allow Terraform configurations to be decomposed and packaged in
 + configure **index.html** & **error.html** files
   + execute `mkdir public && touch ./public/index.html ./public/error.html`
 
-```sh
-# Insert HTML code into index.html
-cat <<EOF > ./public/index.html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>My Website</title>
-</head>
-<body>
-
-  <h1>Welcome to my website!</h1>
-  
-  <p>This is my main page content.</p>
-  
-</body>
-</html>
-EOF
-```
+    ```sh
+    # Insert HTML code into index.html
+    cat <<EOF > ./public/index.html
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>My Website</title>
+    </head>
+    <body>
+    
+      <h1>Welcome to my website!</h1>
+      
+      <p>This is my main page content.</p>
+      
+    </body>
+    </html>
+    EOF
+    ```
 
 ### Working with Files in Terraform
 
@@ -319,31 +346,31 @@ When the code is correctly implemented, the url for the site will be outputted.
 
 - Locals are defined in a locals block:
 
-```hcl
-locals {
-  service_name = "forum"
-  owner        = "Community Team"
-}
-```
+  ```hcl
+  locals {
+    service_name = "forum"
+    owner        = "Community Team"
+  }
+  ```
 
 - Local values can help reduce repetition:
 
-```hcl
-locals {
-  common_tags = {
-    Service = local.service_name
-    Owner   = local.owner
+  ```hcl
+  locals {
+    common_tags = {
+      Service = local.service_name
+      Owner   = local.owner
+    }
   }
-}
-```
+  ```
 
 - Local values are accessed via the local namespace: 
 
-```hcl
-resource "aws_instance" "example" {
-  tags = local.common_tags
-}
-```
+  ```hcl
+  resource "aws_instance" "example" {
+    tags = local.common_tags
+  }
+  ```
 
 - Locals can only be defined once per module. Subsequent definitions will merge with previous.
 
@@ -358,13 +385,13 @@ Overall, locals allow encapsulating reusable values and prevent duplication in T
 
 - They are defined like resources, but start with the data keyword:
 
-```hcl
-data "aws_ami" "ubuntu" {
-  filter {
-    name = "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*"
+  ```hcl
+  data "aws_ami" "ubuntu" {
+    filter {
+      name = "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*"
+    }
   }
-}
-```
+  ```
 
 - Data source values can be referenced like regular resources: 
 
@@ -383,22 +410,18 @@ data "aws_ami" "ubuntu" {
 
 Overall, data sources allow dynamically querying external state rather than hardcoding values. This provides flexibility to access information about existing resources.
 
-### filemd5 & etag function
+### filemd5 and etag function
 The filemd5 and etag functions in Terraform are useful for creating unique identifiers and performing cache invalidation when file contents change.
 
 filemd5 calculates an md5 hash of the contents of a file. For example:
 
-```
-filemd5("${path.module}/config.txt")
-```
+`filemd5("${path.module}/config.txt")`
 
 This generates a unique md5 checksum based on the contents of the file. If the file changes, the md5 hash will be different.
 
 etag generates a unique identifier based on one or more values. For example:
 
-``` 
-etag(filemd5("${path.module}/config.txt"))
-```
+`etag(filemd5("${path.module}/config.txt"))`
 
 This creates an etag value calculated from the md5 hash of the file.
 
@@ -419,35 +442,35 @@ The filemd5 and etag functions allow implementing changes to infrastructure base
 
 - Simple example:
 
-```hcl
-jsonencode(["a", "b", "c"])
-
-// ["a", "b", "c"]
-```
+  ```hcl
+  jsonencode(["a", "b", "c"])
+  
+  // ["a", "b", "c"]
+  ```
 
 - Works for maps:
 
-```hcl
-jsonencode({
-  name = "John"
-  age  = 30
-})
-
-// {"name": "John", "age": 30}
-```
+  ```hcl
+  jsonencode({
+    name = "John"
+    age  = 30
+  })
+  
+  // {"name": "John", "age": 30}
+  ```
 
 - And objects:
 
-```hcl
-jsonencode({
-  user = {
-    name = "John"
-    age  = 30  
-  }
-})
-
-// {"user": {"name": "John", "age": 30}}
-```
+  ```hcl
+  jsonencode({
+    user = {
+      name = "John"
+      age  = 30  
+    }
+  })
+  
+  // {"user": {"name": "John", "age": 30}}
+  ```
 
 - Automatically escapes special characters.
 
@@ -533,21 +556,21 @@ Content versioning of files can be implemented so that the lifecycle of resource
 
 - Example lifecycle config:
 
-```hcl
-resource "aws_instance" "server" {
-
-  # ...
+  ```hcl
+  resource "aws_instance" "server" {
   
-  lifecycle {
-    create_before_destroy = true
-    prevent_destroy       = true
-
-    ignore_changes = [
-      ami, # Ignore AMI changes
-    ]
+    # ...
+    
+    lifecycle {
+      create_before_destroy = true
+      prevent_destroy       = true
+  
+      ignore_changes = [
+        ami, # Ignore AMI changes
+      ]
+    }
   }
-}
-```
+  ```
 
 - create_before_destroy provisions a new updated instance before deleting old instance.
 
@@ -579,23 +602,23 @@ Terraform's []`terraform_data`](https://developer.hashicorp.com/terraform/langua
 
 7. **Data Refresh**: Terraform allows you to refresh the data from external sources by running the `terraform refresh` command. This can be useful if you want to update the information without making changes to your infrastructure.
 
-```hcl
-variable "revision" {
-  default = 1
-}
-
-resource "terraform_data" "replacement" {
-  input = var.revision
-}
-
-# This resource has no convenient attribute which forces replacement,
-# but can now be replaced by any change to the revision variable value.
-resource "example_database" "test" {
-  lifecycle {
-    replace_triggered_by = [terraform_data.replacement]
+  ```hcl
+  variable "revision" {
+    default = 1
   }
-}
-```
+  
+  resource "terraform_data" "replacement" {
+    input = var.revision
+  }
+  
+  # This resource has no convenient attribute which forces replacement,
+  # but can now be replaced by any change to the revision variable value.
+  resource "example_database" "test" {
+    lifecycle {
+      replace_triggered_by = [terraform_data.replacement]
+    }
+  }
+  ```
 
 In summary, Terraform's `terraform_data` resource is a crucial component for fetching and utilizing external data within your infrastructure as code. It provides a reliable and efficient way to incorporate information from external sources into your Terraform configurations, helping you create more dynamic and flexible infrastructure deployments.
 
@@ -669,14 +692,14 @@ Using the `for_each` function in Terraform allows you to iterate over a map or s
 
 8. **Syntax**: The `for_each` function is used with curly braces `{}` to specify the map or set you want to iterate over. For example: `for_each = {key1 = value1, key2 = value2}`.
 
-```hcl
-# my_buckets.tf
-module "bucket" {
-  for_each = toset(["assets", "media"])
-  source   = "./publish_bucket"
-  name     = "${each.key}_bucket"
-}
-```
+  ```hcl
+  # my_buckets.tf
+  module "bucket" {
+    for_each = toset(["assets", "media"])
+    source   = "./publish_bucket"
+    name     = "${each.key}_bucket"
+  }
+  ```
 
 In summary, the `for_each` function in Terraform allows you to create multiple instances of resources or modules based on the elements in a map or set, enabling you to dynamically manage and scale your infrastructure configurations. It is a valuable feature for handling repetitive and scalable infrastructure patterns.
 
