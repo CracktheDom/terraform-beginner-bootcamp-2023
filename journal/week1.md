@@ -649,6 +649,42 @@ In summary, while the `local-exec` provisioner can be useful for specific tasks,
 
 ![pic of CloudFront displaying new content](../assets/Invalidation-triggered.png)
 
+## Configure Terraform to Upload assets to S3
+
+Using the `for_each` function in Terraform allows you to iterate over a map or set of objects and create multiple instances of a resource or module based on the elements in that map or set. Here's a summary of how to use the `for_each` function in Terraform:
+
+1. **Iterable Data Structure**: `for_each` is typically used with a map or a set data structure in Terraform. These data structures contain a collection of elements that you want to use to create resources or modules dynamically.
+
+2. **Resource Replication**: When you apply `for_each` to a resource or module block, Terraform will iterate over the elements in the map or set and create an instance of that resource or module for each element. This allows you to dynamically generate multiple instances of the same resource or module.
+
+3. **Resource Configuration**: Inside the resource or module block, you can reference the current element being iterated using the `each` keyword. You can access attributes of the current element using `each.key` and `each.value` if you are iterating over a map.
+
+4. **Dynamic Configurations**: Using `for_each`, you can create dynamic configurations that scale with your infrastructure needs. For example, you can create multiple AWS EC2 instances, subnets, security groups, or any other resource by specifying their configurations in a map.
+
+5. **Resource Deletion**: When an element is removed from the map or set, Terraform will detect this change and destroy the corresponding resource instance during a `terraform apply`. This allows you to manage the complete lifecycle of your infrastructure dynamically.
+
+6. **Maintaining State**: Terraform maintains the state of each resource or module instance created with `for_each`. This ensures that Terraform can track changes and updates to individual instances, making it a powerful tool for managing scalable infrastructure.
+
+7. **Use Cases**: Common use cases for `for_each` include creating multiple instances of resources, such as multiple virtual machines, databases, network configurations, or any scenario where you need to repeat a resource definition based on a set of inputs.
+
+8. **Syntax**: The `for_each` function is used with curly braces `{}` to specify the map or set you want to iterate over. For example: `for_each = {key1 = value1, key2 = value2}`.
+
+```hcl
+# my_buckets.tf
+module "bucket" {
+  for_each = toset(["assets", "media"])
+  source   = "./publish_bucket"
+  name     = "${each.key}_bucket"
+}
+```
+
+In summary, the `for_each` function in Terraform allows you to create multiple instances of resources or modules based on the elements in a map or set, enabling you to dynamically manage and scale your infrastructure configurations. It is a valuable feature for handling repetitive and scalable infrastructure patterns.
+
+[Docs on for_each function](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each)
+
+CloudFront Distribution displaying assets uploaded via Terraform
+![pic of website displaying assets uploaded via Terraform](../assets/Upload-assets.png)
+
 ## References
 [^1]: [Learn more about Standard Module Structure](https://developer.hashicorp.com/terraform/language/modules/develop/structure)
 [^2]: [Documentation on `terraform state rm` command](https://developer.hashicorp.com/terraform/cli/commands/state/rm)

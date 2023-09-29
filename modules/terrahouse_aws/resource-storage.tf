@@ -109,3 +109,26 @@ resource "aws_s3_object" "error_html" {
 resource "terraform_data" "content_version" {
   input = var.content_version
 }
+
+# # Create a local map to store file information
+# locals {
+#   asset_files = )
+# }
+
+# Iterate over each file in the assets directory
+resource "aws_s3_object" "asset_objects" {
+  for_each = fileset("${path.root}/public/assets/", "**/*.{jpg,jpeg}")
+  bucket = aws_s3_bucket.wonder_bucket.id
+  key = "assets/${each.key}"  # sets the key (object name) in the S3 bucket for each object
+  source = "${path.root}/public/assets/${each.key}"  # Specifies the local file path for each object
+  etag = filemd5("${path.root}/public/assets/${each.key}")
+  content_type = "image/jpeg"
+  lifecycle {
+    ignore_changes = [ etag ]
+  }
+}
+
+# # Example output to display the S3 object keys
+# output "s3_object_keys" {
+#   value = aws_s3_object.asset_objects[*].key
+# }
