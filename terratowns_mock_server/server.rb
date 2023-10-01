@@ -283,7 +283,6 @@ class TerraTownsMockServer < Sinatra::Base
     # Extract data from the payload for validation and updates.
     name = payload["name"]
     description = payload["description"]
-    domain_name = payload["domain_name"]
     content_version = payload["content_version"]
 
     # Check if the 'uuid' parameter in the request matches the UUID of the stored home.
@@ -297,7 +296,7 @@ class TerraTownsMockServer < Sinatra::Base
     home.town = $home[:town]
     home.name = name
     home.description = description
-    home.domain_name = domain_name
+    home.domain_name = $home[:domain_name]
     home.content_version = content_version
 
     # Check if the 'home' object is valid according to the defined validations.
@@ -336,10 +335,12 @@ class TerraTownsMockServer < Sinatra::Base
     end
 
     # Clear the '$home' object to simulate the deletion of the home.
+    uuid = $home[:uuid]
     $home = {}
+    { uuid: uuid }.to_json
 
     # Return a JSON response indicating the successful deletion of the house.
-    { message: "House deleted successfully" }.to_json
+    # { message: "House deleted successfully" }.to_json
   end
 end
 
