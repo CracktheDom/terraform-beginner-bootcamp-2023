@@ -1,9 +1,11 @@
 # Terraform Beginner Bootcamp 2023 - week 0
+
+  * [Semantic Versioning](#semantic-versioning)
   * [Install Terraform CLI](#install-terraform-cli)
     + [Considerations for the installation of Terraform](#considerations-for-the-installation-of-terraform)
     + [Gitpod Lifecycle Considerations](#gitpod-lifecycle-considerations)
   * [Working with Environment Variables](#working-with-environment-variables)
-    + [Setting/Unsetting Environment Variables](#setting-unsetting-environment-variables)
+    + [Setting and Unsetting Environment Variables](#setting-and-unsetting-environment-variables)
     + [Setting Environment Variables in Gitpod](#setting-environment-variables-in-gitpod)
   * [Installing AWS CLI](#installing-aws-cli)
     + [She-bang](#she-bang)
@@ -21,7 +23,7 @@
     + [Create Terraform executable alias](#create-terraform-executable-alias)
   * [References](#references)
 
-# Terraform Beginner Bootcamp 2023
+# Semantic Versioning
 
 Semantic versioning[^1] is a system for assigning version numbers that conveys meaning about the code changes in each new release. It follows a **MAJOR.MINOR.PATCH** format, e.g. `1.0.1`:
 
@@ -61,7 +63,7 @@ The commands to install Terraform application were incorrect and utilized deprec
 + To list all currently set environment variables, use the `env` command
 + The results of the `env` command can be filtered using the `grep` command, e.g. `env | grep AWS_`
 
-### Setting/Unsetting Environment Variables
+### Setting and Unsetting Environment Variables
 + To set a variable, execute `variable_name=value_of_variable`, e.g. `GREETING='Hi, there!'`
 + This method sets the environment variable in the current terminal that is being used. If another terminal is opened, this environment variable will not be available.
 + To set environment variables *globally*, execute the following `export GREETING='Hi, there!!'`
@@ -116,7 +118,7 @@ Modules encapsulate reusable Terraform configurations. Modules can be used to cr
 
 Module example:
 
-```
+```hcl
 module "vpc" {
   source = "./vpc-module"
   name = "my-vpc"
@@ -167,7 +169,7 @@ To migrate the state file from the local environment to Terra Cloud:
 6. Paste the API token after the prompt that asks for the token
 7. Execute `ls -lah ~/.terraform.d` & verify the `credentials.tfrc.json` file exists
 8. Add the following `cloud` block to any `.tf` file with the appropriate values for `organization` and `workspaces`
-```terraform
+```hcl
 terraform {
   cloud {
     organization = "organization-name"
@@ -200,9 +202,7 @@ Some key points about `.bash_profile`:
 
 - For example, can create alias like:
 
-```
-alias tf=$(which terraform)
-```
+`alias tf=$(which terraform)`
 
 - This lets you run `tf` instead of `terraform`
 
@@ -221,7 +221,7 @@ alias g='git'
 
 So in summary, the `.bash_profile` can be used to set up a personalized Bash environment including helpful aliases for commands you use often. This allows you to work more efficiently at the command line.
 
-Created Bash script, [./bin/set_tf_alias](./bin/set_tf_alias), to add terraform alias to `~/.bash_profile`
+Created Bash script, `./bin/set_tf_alias`, to add terraform alias to `~/.bash_profile`
 
 ## References
 [^1]: [Learn more about semantic versioning](http://www.semver.org)
