@@ -5,6 +5,7 @@ resource "aws_s3_bucket" "wonder_bucket" {
   tags = {
     UserUuid = random_uuid.id.result
     Hello = "Saturn"
+  }
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration
