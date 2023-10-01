@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "wonder_bucket" {
 
   tags = {
     UserUuid = random_uuid.id.result
+    Hello = "World"
   }
 }
 
@@ -38,11 +39,11 @@ resource "aws_s3_bucket_policy" "wonder_bucket_policy" {
           aws_s3_bucket.wonder_bucket.arn,
           "${aws_s3_bucket.wonder_bucket.arn}/*",
         ]
-        Condition = {
-          StringEquals = {
-            "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
-          }
-        }
+        # Condition = {
+        #   StringEquals = {
+        #     "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
+        #   }
+        # }
       },
     ]
   })

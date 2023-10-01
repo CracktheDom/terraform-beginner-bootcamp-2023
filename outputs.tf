@@ -23,7 +23,7 @@ output "random_uuid" {
   value       = module.terrahouse_aws.random_uuid
 }
 
-output "cloudfront_domain" {
-  description = "Domain of the CloudFront distribution"
-  value = module.terrahouse_aws.cloudfront_domain
-}
+# output "cloudfront_domain" {
+#   description = "Domain of the CloudFront distribution"
+#   value = module.terrahouse_aws.cloudfront_domain
+# }
