@@ -6,6 +6,8 @@ tasks:
       bundle exec ruby server.rb
       cd $THEIA_WORKSPACE_ROOT
   - name: terraform
+    env: 
+      TF_LOG: DEBUG
     before: |
       cd $THEIA_WORKSPACE_ROOT
       source ./bin/install_terraform_cli
