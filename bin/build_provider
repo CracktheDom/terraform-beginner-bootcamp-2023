@@ -5,10 +5,11 @@ PLUGIN_DIR="$HOME/.terraform.d/plugins/local.providers/local/terratowns/1.0.0"
 # https://servian.de/terraform-local-providers-and-registry-mirror-configuration-b963117dfffa
 
 cd $PROJECT_ROOT/terraform-provider-terratowns
-mv -v $PROJECT_ROOT/.terraformrc $HOME/
+cp $PROJECT_ROOT/terraformrc $HOME/.terraformrc
 rm -rf $HOME/.terraform.d/plugins
 rm -rf $PROJECT_ROOT/.terraform
 rm -rf $PROJECT_ROOT/.terraform.lock.hcl
 go build -o terraform-provider-terratowns_v1.0.0
-mkdir -p $PLUGIN_DIR/x86_64 $PLUGIN_DIR/linux_amd64
-cp terraform-provider-terratowns_v1.0.0 $PLUGIN_DIR/x86_64 PLUGIN_DIR/linux_amd64
+mkdir -vp $PLUGIN_DIR/x86_64 $PLUGIN_DIR/linux_amd64
+cp -u terraform-provider-terratowns_v1.0.0 $PLUGIN_DIR/x86_64 
+cp -u terraform-provider-terratowns_v1.0.0 $PLUGIN_DIR/linux_amd64
