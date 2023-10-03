@@ -1,9 +1,11 @@
 package main
 
 import (
+	// "context"
 	"fmt"
 	// "log"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	// "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	// "github.com/google/uuid"
 )
@@ -19,6 +21,12 @@ func main() {
 	// Print "Hello, World!" to the console.
 	fmt.Println("Hello, World!")
 }
+
+// type Config struct {
+// 	Endpoint  string
+// 	Token     string
+// 	UserUuid  string
+// }
 
 // Provider returns a Terraform schema.Provider that allows Terraform to manage
 // resources and data sources related to an external service.
@@ -64,18 +72,65 @@ func Provider() *schema.Provider {
 // It takes an interface{} type value and a key string for reference.
 // If the value is not a valid UUID, it appends an error message to the 'errs' slice.
 // Returns a slice of warning messages and a slice of errors encountered during validation.
-// func validateUUID(value interface{}, key string) (warns []string, errs []error) {
-// 	// Log the start of UUID validation
-// 	log.Print("validateUUID:start")
+/*func validateUUID(value interface{}, key string) (warns []string, errs []error) {
+	// Log the start of UUID validation
+	log.Print("validateUUID:start")
 	
-// 	// Assert that the value is of type string
-// 	val := value.(string)
+	// Assert that the value is of type string
+	val := value.(string)
 	
-// 	// Parse the UUID string, and if there is an error, add it to the 'errs' slice
-// 	if _, err := uuid.Parse(val); err != nil {
-// 		errs = append(errs, fmt.Errorf("invalid UUID format"))
-// 	}
+	// Parse the UUID string, and if there is an error, add it to the 'errs' slice
+	if _, err := uuid.Parse(val); err != nil {
+		errs = append(errs, fmt.Errorf("invalid UUID format"))
+	}
 	
-// 	// Log the end of UUID validation
-// 	log.Print("validateUUID:end")
-// }
+	// Log the end of UUID validation
+	log.Print("validateUUID:end")
+	return
+}
+
+func providerConfigure(p *schema.Provider) schema.ConfigureContextFunc {
+	return func(ctx context.Context, d *schema.ResourceData) (interface {}, diag.Diagnostics) {
+		log.Print("providerConfigure:start")
+		config := Config{
+			Endpoint : d.Get("endpoint").(string),
+			Token : d.Get("token").(string),
+			UserUuid : d.Get("user_uuid").(string),
+		}
+		log.Print("providerConfigure:end")
+		return &config, nil
+	}
+}
+
+func Resource() *schema.Resource {
+	log.Print("Resource:start")
+	resource := &schema.Resource{
+		CreateContext: resourceHouseCreate,
+		ReadContext: resourceHouseRead,
+		UpdateContext: resourceHouseUpdate,
+		DeleteContext: resourceHouseDelete,
+	}
+	log.Print("Resource:end")
+	return resource
+}
+
+func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	return diags
+}
+
+func resourceHouseRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	return diags
+}
+
+func resourceHouseUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	return diags
+}
+
+func resourceHouseDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	return diags
+}
+*/

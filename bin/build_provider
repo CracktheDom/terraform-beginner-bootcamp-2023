@@ -10,6 +10,6 @@ rm -rf $HOME/.terraform.d/plugins
 rm -rf $PROJECT_ROOT/.terraform
 rm -rf $PROJECT_ROOT/.terraform.lock.hcl
 go build -o terraform-provider-terratowns_v1.0.0
-mkdir -vp $PLUGIN_DIR/x86_64 $PLUGIN_DIR/linux_amd64
+mkdir -p $PLUGIN_DIR/x86_64 $PLUGIN_DIR/linux_amd64
 cp -u terraform-provider-terratowns_v1.0.0 $PLUGIN_DIR/x86_64 
 cp -u terraform-provider-terratowns_v1.0.0 $PLUGIN_DIR/linux_amd64
