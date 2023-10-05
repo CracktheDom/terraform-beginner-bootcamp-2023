@@ -179,10 +179,9 @@ func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interfac
         "content_version": d.Get("content_version").(int),
     }
 
-    payloadBytes, p_error := json.Marshal(payload)
-    log.Print("payloadBytes: " + payloadBytes)
-    if p_error != nil {
-        return diag.FromErr(p_error)
+    payloadBytes, err := json.Marshal(payload)
+    if err != nil {
+        return diag.FromErr(err)
     }
 
     var url = config.Endpoint + "/u/" + config.UserUuid + "/homes/"
@@ -273,7 +272,7 @@ func resourceHouseRead(ctx context.Context, d *schema.ResourceData, m interface{
         d.Set("description", responseData["description"].(string))
         d.Set("domain_name", responseData["domain_name"].(string))
         d.Set("content_version", responseData["content_version"].(float64))
-    } else if response.StatusCode != http.StatusNotFound {
+    } else if response.StatusCode == http.StatusNotFound {
         d.SetId("")
     } else if response.StatusCode != http.StatusOK {
         return diag.FromErr(fmt.Errorf("failed to read home resource, status_code: %d, status: %s, body %s", response.StatusCode, response.Status, responseData))
