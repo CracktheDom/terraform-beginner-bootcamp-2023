@@ -28,7 +28,7 @@ provider "aws" {
 provider "random" {}
 
 provider "terratowns" {
-  endpoint  = "http://localhost:4567"
+  endpoint  = "http://localhost:4567/api"
   user_uuid = "d16ea99b-60ea-4ddc-8414-3b8a3ab72e9f"
   token     = "9b49b3fb-b8e9-483c-b703-97ba88eef8e0"
 }
@@ -40,3 +40,11 @@ provider "terratowns" {
 #   content_version = var.content_version
 #   # assets_path = var.assets_path
 # }
+
+resource "terratowns_home" "home" {
+  name = "Fifty Years of Rap"
+  description = "2023 marked the 50th anniversary of the birth of Rap music"
+  domain_name = "57rfeknld.cloudfront.net"  # module.terrahouse_aws.cloudfront_domain
+  town = "Ripping-Rap-Ridge"
+  content_version = 1
+}
