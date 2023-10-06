@@ -43,8 +43,13 @@ provider "terratowns" {
 
 resource "terratowns_home" "home" {
   name = "Fifty Years of Rap"
-  description = "2023 marked the 50th anniversary of the birth of Rap music"
+  description = <<EOF
+2023 marked the 50th anniversary of the birth of Rap music!!!
+
+It started with a back-to-school party in the Bronx, New York in 1973.
+EOF
+
   domain_name = "57rfeknld.cloudfront.net"  # module.terrahouse_aws.cloudfront_domain
-  town = "Ripping-Rap-Ridge"
-  content_version = 1
+  town = "Ripping-Rap-Ridge"  # make sure to choose a town that is already in the list in the mock server
+  content_version = 2
 }

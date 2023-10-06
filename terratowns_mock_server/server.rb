@@ -28,7 +28,8 @@ class Home
     'cooker-cove',
     "the-nomad-pad",
     "gamers-grotto",
-    "video-valley"
+    "video-valley",
+    "Ripping-Rap-Ridge"  # make sure to choose a town that is already in the list
   ]}
 
   # Validate the presence of the 'name' attribute.

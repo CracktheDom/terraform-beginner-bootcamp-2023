@@ -294,7 +294,7 @@ func resourceHouseUpdate(ctx context.Context, resource_d *schema.ResourceData, m
 	payload := map[string]interface{}{
 		"name":            resource_d.Get("name").(string),
 		"description":     resource_d.Get("description").(string),
-		"content_version": resource_d.Get("content_version").(float64),
+		"content_version": resource_d.Get("content_version").(int),
 	}
 
 	payloadBytes, err := json.Marshal(payload)
