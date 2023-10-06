@@ -183,7 +183,7 @@ func resourceHouseCreate(ctx context.Context, resource_d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	url := config.Endpoint + "/u/" + config.UserUuid + "/homes/"
+	url := config.Endpoint + "/u/" + config.UserUuid + "/homes"
 	log.Print("URL: " + url)
 
 	// Construct the HTTP request
@@ -247,7 +247,7 @@ func resourceHouseRead(ctx context.Context, resource_d *schema.ResourceData, m i
 	}
 
 	// Set Headers
-	request.Header.Set("Authorization", "Bearer "+config.Token)
+	request.Header.Set("Authorization", "Bearer " + config.Token)
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 
@@ -312,7 +312,7 @@ func resourceHouseUpdate(ctx context.Context, resource_d *schema.ResourceData, m
 	}
 
 	// Set Headers
-	request.Header.Set("Authorization", "Bearer "+config.Token)
+	request.Header.Set("Authorization", "Bearer " + config.Token)
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 
@@ -324,18 +324,18 @@ func resourceHouseUpdate(ctx context.Context, resource_d *schema.ResourceData, m
 
 	defer response.Body.Close()
 
-	var responseData map[string]interface{}
-	if err := json.NewDecoder(response.Body).Decode(&responseData); err != nil {
-		return diag.FromErr(err)
-	}
+    var responseData map[string]interface{}
+    if err := json.NewDecoder(response.Body).Decode(&responseData); err != nil {
+        return diag.FromErr(err)
+    }
 
-	if response.StatusCode != http.StatusOK {
-		return diag.FromErr(fmt.Errorf("failed to update home resource, status_code: %d, status: %s, body: %s", response.StatusCode, response.Status, responseData))
-	}
+    if response.StatusCode != http.StatusOK {
+        return diag.FromErr(fmt.Errorf("failed to update home resource, status_code: %d, status: %s, body: %s", response.StatusCode, response.Status, responseData))
+    }
 
-	// homeUUID = responseData["uuid"].(string)
+    // homeUUID = responseData["uuid"].(string)
 
-	resource_d.SetId(responseData["uuid"].(string))
+    resource_d.SetId(responseData["uuid"].(string))
 
 	log.Print("resourceHouseUpdate:end")
 
@@ -366,7 +366,7 @@ func resourceHouseDelete(ctx context.Context, resource_d *schema.ResourceData, m
 	}
 
 	// Set Headers
-	request.Header.Set("Authorization", "Bearer "+config.Token)
+	request.Header.Set("Authorization", "Bearer " + config.Token)
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 
@@ -378,7 +378,11 @@ func resourceHouseDelete(ctx context.Context, resource_d *schema.ResourceData, m
 
 	defer response.Body.Close()
 
-	resource_d.SetId("")
+    if response.StatusCode != http.StatusOK {
+        return diag.FromErr(fmt.Errorf("failed to delete home resource, status_code: %d, status: %s", response.StatusCode, response.Status))
+    }
+
+    resource_d.SetId("")
 
 	log.Print("resourceHouseDelete:end")
 	return diags
