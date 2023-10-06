@@ -14,7 +14,7 @@ terraform {
     }
 
     terratowns = {
-      source = "local.providers/local/terratowns"
+      source  = "local.providers/local/terratowns"
       version = "1.0.0"
     }
   }
@@ -28,28 +28,29 @@ provider "aws" {
 provider "random" {}
 
 provider "terratowns" {
-  endpoint  = "http://localhost:4567/api"
-  user_uuid = "e328f4ab-b99f-421c-84c9-4ccea042c7d1"
-  token     = "9b49b3fb-b8e9-483c-b703-97ba88eef8e0"
+  endpoint  = "https://terratowns.cloud/api"
+  user_uuid = var.terratowns_uuid
+  token     = var.terratowns_access_token
 }
 
-# module "terrahouse_aws" {
-#   source              = "./modules/terrahouse_aws"
-#   index_html_filepath = var.index_html_filepath
-#   error_html_filepath = var.error_html_filepath
-#   content_version = var.content_version
-#   # assets_path = var.assets_path
-# }
+module "terrahouse_aws" {
+  source              = "./modules/terrahouse_aws"
+  index_html_filepath = "${path.root}/public/index.html"
+  error_html_filepath = "${path.root}/public/error.html"
+  content_version     = var.content_version
+  # assets_path         = var.assets_path
+  # uuid                = var.terratowns_uuid
+}
 
 resource "terratowns_home" "home" {
-  name = "Fifty Years of Rap"
+  name        = "Fifty Years of Rap"
   description = <<EOF
 2023 marked the 50th anniversary of the birth of Rap music!!!
 
 It started with a back-to-school party in the Bronx, New York in 1973.
 EOF
 
-  domain_name = "57rfeknld.cloudfront.net"  # module.terrahouse_aws.cloudfront_domain
-  town = "Ripping-Rap-Ridge"  # make sure to choose a town that is already in the list in the mock server
+  domain_name     = module.terrahouse_aws.cloudfront_domain
+  town            = "missingo"  # make sure to choose a town that is already in the list in the mock server
   content_version = var.content_version
 }
