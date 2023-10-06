@@ -6,6 +6,6 @@
 #   type = string
 # }
 
-# variable "content_version" {
-#   type = number
-# }
+variable "content_version" {
+  type = number
+}

@@ -29,7 +29,7 @@ provider "random" {}
 
 provider "terratowns" {
   endpoint  = "http://localhost:4567/api"
-  user_uuid = "d16ea99b-60ea-4ddc-8414-3b8a3ab72e9f"
+  user_uuid = "e328f4ab-b99f-421c-84c9-4ccea042c7d1"
   token     = "9b49b3fb-b8e9-483c-b703-97ba88eef8e0"
 }
 
@@ -51,5 +51,5 @@ EOF
 
   domain_name = "57rfeknld.cloudfront.net"  # module.terrahouse_aws.cloudfront_domain
   town = "Ripping-Rap-Ridge"  # make sure to choose a town that is already in the list in the mock server
-  content_version = 2
+  content_version = var.content_version
 }
