@@ -1,4 +1,4 @@
-# Terraform Beginner Bootcamp Week 2
+# Terraform Beginner Bootcamp - Week 2
 
 ## Ruby
 Ruby's package manager, commonly known as RubyGems, is a powerful tool for managing and distributing Ruby libraries (gems). Here's a concise summary of key points when using Ruby's package manager:
@@ -57,3 +57,50 @@ Sinatra is a minimalistic and lightweight web framework for Ruby that is designe
 12. **Scalability**: While Sinatra is well-suited for small to medium-sized applications, it might not be the best choice for large-scale, complex systems, where more extensive frameworks like Ruby on Rails might be preferable.
 
 In summary, Sinatra is a lightweight and easy-to-learn web framework for Ruby that's perfect for quickly building small to medium-sized web applications and APIs. Its simplicity, clear syntax, and modularity make it an excellent choice for developers looking for a straightforward way to get their web projects up and running.
+
+## Setting Up the Mock Server
+1. Create a new github issue and a branch associated with same issue
+2. Make new directory to house mock server repository, `mkdir terratown_mock_server`
+3. Clone the repo that contains the necessary components to implement the Sinatra server, `git clone https://github.com/...`
+4. Remove the *.git file from the directory. If the git file is not removed before committing changes, git will interpret the newly imported sub-directory as a module
+5. Move the Bash scripts in the terratowns bin directory to the bin directory in the workspace root directory.
+   + The Bash scripts will perform Create, Read, Update & Delete operations that will be reflected in the Sinatra server
+   + Make the scripts executable using `chmod u+x /path/to/file`
+6. The `server.rb` file is configured to run the Sinatra server and handle HTTP requests sent by the respective Bash scripts
+7. To start the Sinatra server, navigate to the directory containing the `server.rb` file and execute
+   ```sh
+   bundle install
+   bundle exec ruby server.rb
+   ```
+8. Tasks were added to the `.gitpod.yml` to automate the compilation of the `server.rb` file and start the Sinatra server
+
+## Implement the Custom Terraform Provider
+### Create a Bash script to automate the steps to build the Terraform Provider
+1. Sets the `PLUGIN_DIR` variable to a specific directory where Terraform provider plugins are typically located.
+
+2. Changes the current working directory to a location specified by the `PROJECT_ROOT` variable, which is expected to be set elsewhere in the script or environment.
+
+3. Moves a file named `.terraformrc` from the `PROJECT_ROOT` directory to the user's home directory (`$HOME`).
+
+4. Removes two directories: `$HOME/.terraform.d/plugins` and `.terraform` in the `PROJECT_ROOT` directory. This is likely done to clean up any previously installed Terraform plugins and related cache.
+
+5. Removes a file named `.terraform.lock.hcl` in the `PROJECT_ROOT` directory.
+
+6. Compiles a Go binary from the source code located in the `PROJECT_ROOT/terraform-provider-terratowns` directory, naming it `terraform-provider-terratowns_v1.0.0`.
+
+7. Creates two directories (`$PLUGIN_DIR/x86_64` and `$PLUGIN_DIR/linux_amd64`) in the `PLUGIN_DIR` to store the compiled plugin binary for different platforms.
+
+8. Copies the compiled binary `terraform-provider-terratowns_v1.0.0` to both `$PLUGIN_DIR/x86_64` and `$PLUGIN_DIR/linux_amd64`.
+
+In summary, this script, `./bin/build_provider` seems to be involved in managing a Terraform provider plugin for a specific custom provider named "terratowns." It compiles the provider from source code, organizes it in a directory structure for different platforms, and prepares it for use in Terraform configurations. Additionally, it moves the `.terraformrc` file and removes certain cache and lock files as part of the setup process.
+
+### The Custom Terraform Provider
+- The custom Terraform provider is written in Golang
+- example of installing dependencies: `go get github.com/hashicorp/terraform-plugin-sdk/v2/plugin`
+
+### Terraform Provider Block
+
+## Implement CRUD in the Custom Terraform Provider
+
+## Access to Terratowns
+Navigate to [https://terratowns.cloud/](https://terratowns.cloud/)
