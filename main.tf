@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "cloudBouncer"
+    workspaces {
+      name = "terra-house-1"
+    }
+  }
+
   required_providers {
 
     # https://registry.terraform.io/providers/hashicorp/random/latest/docs
@@ -27,6 +34,11 @@ provider "aws" {
 
 provider "random" {}
 
+
+# Since this custom provider has not been published to the Terraform Registry, 
+# selecting 'remote' execution within Terraform Cloud would result in unsuccessful 
+# terraform plan/apply execution, so 'local' execution within Terraform Cloud 
+# must be selected
 provider "terratowns" {
   endpoint  = "https://terratowns.cloud/api"
   user_uuid = var.terratowns_uuid
@@ -45,12 +57,11 @@ module "terrahouse_aws" {
 resource "terratowns_home" "home" {
   name        = "Fifty Years of Rap"
   description = <<EOF
-2023 marked the 50th anniversary of the birth of Rap music!!!
-
+2023 marked the 50th anniversary of the birth of Hip Hop music!!!
 It started with a back-to-school party in the Bronx, New York in 1973.
 EOF
 
   domain_name     = module.terrahouse_aws.cloudfront_domain
-  town            = "missingo"  # make sure to choose a town that is already in the list in the mock server
+  town            = "melomaniac-mansion" # make sure to choose a town that is already in the list in the mock/prod server
   content_version = var.content_version
 }
