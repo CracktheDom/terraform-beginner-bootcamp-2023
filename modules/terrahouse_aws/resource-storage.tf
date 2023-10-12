@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
 resource "aws_s3_bucket" "wonder_bucket" {
-  bucket = random_string.random_bucket_name.result
+  bucket = "terraform-bootcamp-${random_string.random_bucket_name.result}"
 
   tags = {
     UserUuid = random_uuid.id.result

@@ -1,22 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Website</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hip Hop Haven</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset some default styles */
+    body {
+            background-color: #FDF5E6;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+    /* Define responsive styles using media queries */
+    @media (max-width: 768px) {
+        /* Styles for screens narrower than 768px (typical mobile screens) */
+        body {
+            font-size: 14px; /* Adjust font size for smaller screens */
+        }
+    }
+
+    /* Add more media queries for different screen sizes as needed */
+
+    /* Example: Adjust layout for screens larger than 1024px (typical desktop screens) */
+    @media (min-width: 1025px) {
+        body {
+            max-width: 960px; /* Center content on larger screens */
+            margin: 0 auto;
+        }
+    }
+
+    @media (min-width: 1025px) {
+    /* Add your CSS rules for desktop screens here */
+    body {
+        font-size: 18px;
+        /* Adjust other styles for larger screens */
+    }
+
+    /* Add more styles as needed */
+    }    
+
+    /* Add more styles and media queries based on your design requirements */
+  </style>
 </head>
 <body>
 
-  <h1>Welcome to my Terraform Generated website served by CloudFront!</h1>
-  
-  <div>
-    <img src="assets/de_la_soul.jpg" alt="members of De La Soul" width="50%">
-    <p>This is the main page content.</p>
-  </div>
-  <figure>
-    <img src="assets/these-united-states-mos-def.jpg" alt="Mos Def" width="50%">
-    <figcaption>The mighty Mos Def</figcaption>
-  </figure>
-  <div>
-    <img src="assets/th-1562989580.jpg" alt="members of Dilated Peoples">
+  <h1>50 Years of Hip Hop!</h1>
+<div class="container">
+    <figure>
+      <img src="assets/de_la_soul.jpg" alt="members of De La Soul" width="50%">
+      <figcaption>The Long Island Hip Hop trio, De La Soul</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/these-united-states-mos-def.jpg" alt="Mos Def" width="50%">
+      <figcaption>The mighty Mos Def</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/th-1562989580.jpg" alt="members of L.A.-based Hip Hop group, Dilated Peoples">
+      <figcaption>members of Los Angeles-based Hip Hop group, Dilated Peoples</figcaption>
+    </figure>
   </div>
   
 </body>
