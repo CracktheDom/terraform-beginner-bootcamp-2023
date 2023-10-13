@@ -62,6 +62,6 @@ It started with a back-to-school party in the Bronx, New York in 1973.
 EOF
 
   domain_name     = module.terrahouse_aws.cloudfront_domain
-  town            = "melomaniac-mansion" # make sure to choose a town that is already in the list in the mock/prod server
+  town            = var.which_terratown[0] # make sure to choose a town that is already in the list in the mock/prod server
   content_version = var.content_version
 }
