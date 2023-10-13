@@ -3,10 +3,10 @@
 #   value       = module.terrahouse_aws.arn
 # }
 
-# output "wonder_bucket_name" {
-#   description = "Name (id) of the bucket"
-#   value       = module.terrahouse_aws.name
-# }
+output "wonder_bucket_name" {
+  description = "Name (id) of the bucket"
+  value       = module.terrahouse_aws.name
+}
 
 # output "wonder_bucket_domain" {
 #   description = "Domain name of the bucket"
@@ -23,7 +23,7 @@
 #   value       = module.terrahouse_aws.random_uuid
 # }
 
-# output "cloudfront_domain" {
-#   description = "Domain of the CloudFront distribution"
-#   value = module.terrahouse_aws.cloudfront_domain
-# }
+output "cloudfront_domain" {
+  description = "Domain of the CloudFront distribution"
+  value = module.terrahouse_aws.cloudfront_domain
+}
