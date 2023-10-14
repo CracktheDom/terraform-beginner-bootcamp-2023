@@ -27,3 +27,7 @@ variable "which_terratown" {
         error_message = "You must a town within the list of towns"
   }
 }
+
+variable "endpoint" {
+  type = string
+}

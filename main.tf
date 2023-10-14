@@ -40,7 +40,7 @@ provider "random" {}
 # terraform plan/apply execution, so 'local' execution within Terraform Cloud 
 # must be selected
 provider "terratowns" {
-  endpoint  = "https://terratowns.cloud/api"
+  endpoint  = var.endpoint
   user_uuid = var.terratowns_uuid
   token     = var.terratowns_access_token
 }
