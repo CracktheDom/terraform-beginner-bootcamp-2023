@@ -165,7 +165,7 @@ To migrate the state file from the local environment to Terra Cloud:
 2. When executing the `terraform login` command, the script utilizes Lynx, a text-based browser, that does not render the html page correctly within the terminal of the Gitpod environment. The workaround is to navigate to [https://app.terraform.io/app/settings/tokens?source=terraform-login](https://app.terraform.io/app/settings/tokens?source=terraform-login)
 3. Create the API token
 4. Copy the API token
-5. Quit, `Q`, the Lynx browser
+5. Quit the Lynx browser by pressing the `Q` key
 6. Paste the API token after the prompt that asks for the token
 7. Execute `ls -lah ~/.terraform.d` & verify the `credentials.tfrc.json` file exists
 8. Add the following `cloud` block to any `.tf` file with the appropriate values for `organization` and `workspaces`
@@ -181,12 +181,12 @@ terraform {
 9. [Terraform Cloud Documentation for storing the state file remotely](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-remote)
 
 10. In the Terraform Cloud console, in **terra-house-1** workspace, navigate to the **Variables** console
-11. Add **Workspace Variables** for **AWS_ACCESS_KEY_ID** and **AWS_SECRET_ACCESS_KEY** and input their respective values from AWS IAM user credentials created earlier. Make sure to select the **Sensitive** option
+11. Add **Workspace Variables** for **AWS_ACCESS_KEY_ID** and **AWS_SECRET_ACCESS_KEY** and input their respective values from AWS IAM user credentials created earlier. Make sure to select the **Environment** and **Sensitive** options
 12. Execute `terraform init` to add the cloud provider
 13. Next, execute `terraform plan` to view proposed changes that will be applied to deploying infrastructure
 14. Next, execute `terraform apply` to deploy infrastructure
 15. Check the **Runs** console within Terraform Cloud to view whether the `terraform plan` or `terraform apply` commands were successful or not
-16. If `terraform apply` commands was successful, you can view the state file in the **States** console
+16. If the `terraform apply` command was successful, you can view the state file in the **States** console
 
 ### Generate Terraform Cloud credentials file
 Since the `.terraform` directory and other similar directories are not being tracked in the version control system, whenever a Gitpod workspace is started, the directories and files, i.e., `~/.terraform.d/credentials.tfrc.json` that were previously created by executing the `terraform login` command are lost. Setting the Terraform Cloud API Token as an environment variable, TERRAFORM_CLOUD_TOKEN, would allow for the implementation of a Bash script to recreate the `~/.terraform.d/credentials.tfrc.json` file, and allow for the Terraform state file to continue to be stored remotely.
@@ -200,11 +200,11 @@ Some key points about `.bash_profile`:
 
 - Aliases allow creating shortcuts for commonly used commands or long commands
 
-- For example, can create alias like:
+- For example, can create an alias like:
 
 `alias tf=$(which terraform)`
 
-- This lets you run `tf` instead of `terraform`
+- This lets you run `tf` instead of `terraform` and the `$(which terraform)` will run the terraform executable regardless if it is in the **PATH** variable or not
 
 - Other common aliases:
 
